@@ -33,13 +33,17 @@ const InputField = ({
   };
 
   return (
-    <View>
-      <View style={styles.labelContainer}>
-        {(isFocused || hasText) && <Text style={styles.label}>{label}</Text>}
+    <View style={styles.container}>
+      <View style={[styles.labelContainer]}>
+        {(isFocused || hasText) && (
+          <Text style={[styles.label, isFocused ? styles.labelFocused : {}]}>
+            {label}
+          </Text>
+        )}
       </View>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, isFocused ? styles.inputFocused : {}]}
         placeholder={isFocused ? '' : label}
         secureTextEntry={secureTextEntry}
         value={value}
@@ -57,7 +61,7 @@ const InputField = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 16,
+    height: 70,
   },
   labelContainer: {
     height: 15,
@@ -66,11 +70,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#16715e',
   },
+  labelFocused: {
+    fontWeight: 'bold',
+  },
   input: {
     borderWidth: 0,
     borderColor: '#16715e',
     borderBottomWidth: 1,
     borderStyle: 'solid',
+  },
+  inputFocused: {
+    borderBottomWidth: 2,
   },
 });
 
