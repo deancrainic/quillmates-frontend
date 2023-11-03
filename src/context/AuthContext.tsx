@@ -8,7 +8,6 @@ import React, {
 
 export interface AuthModel {
   userId: string;
-  exp: string;
   token: string;
 }
 
@@ -33,7 +32,6 @@ type AuthProviderProps = PropsWithChildren;
 const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const [auth, setAuth] = useState<AuthModel>({
     userId: '',
-    exp: '',
     token: '',
   });
 

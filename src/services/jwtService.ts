@@ -5,8 +5,7 @@ export const extractJwt = (jwt: string): AuthModel => {
   const payload = JSON.parse(decode(jwt.split('.')[1]));
 
   return {
-    userId: payload.sub,
-    exp: payload.exp,
+    userId: payload.userId,
     token: jwt,
   };
 };

@@ -23,7 +23,6 @@ const AppContainer = (): JSX.Element => {
       if (ex_auth === null) {
         setAuth({
           userId: '',
-          exp: '',
           token: '',
         });
       } else {
