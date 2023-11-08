@@ -1,32 +1,86 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputChangeEventData,
+  View,
+} from 'react-native';
 
 type InputFieldProps = {
   label: string;
-  placeholder: string;
+  value: string;
+  secureTextEntry?: boolean;
+  onChangeText: (text: any) => void;
 };
 
-const InputField = ({ label, placeholder }: InputFieldProps): JSX.Element => {
+const InputField = ({
+  label,
+  value,
+  onChangeText,
+  secureTextEntry = false,
+}: InputFieldProps): JSX.Element => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [hasText, setHasText] = useState(false);
+
+  const handleTextChange = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    const text = event.nativeEvent.text;
+    onChangeText(text);
+    text.length > 0 ? setHasText(true) : setHasText(false);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput style={styles.input} placeholder={placeholder} />
+      <View style={[styles.labelContainer]}>
+        {(isFocused || hasText) && (
+          <Text style={[styles.label, isFocused ? styles.labelFocused : {}]}>
+            {label}
+          </Text>
+        )}
+      </View>
+
+      <TextInput
+        style={[styles.input, isFocused ? styles.inputFocused : {}]}
+        placeholder={isFocused ? '' : label}
+        secureTextEntry={secureTextEntry}
+        value={value}
+        onChange={handleTextChange}
+        onFocus={() => {
+          setIsFocused(true);
+        }}
+        onBlur={() => {
+          setIsFocused(false);
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    height: 70,
+  },
+  labelContainer: {
+    height: 15,
   },
   label: {
-    fontSize: 12,
-    color: 'darkgray',
+    fontSize: 14,
+    color: '#16715e',
+  },
+  labelFocused: {
+    fontWeight: 'bold',
   },
   input: {
-    borderWidth: 1,
+    borderWidth: 0,
+    borderColor: '#16715e',
+    borderBottomWidth: 1,
     borderStyle: 'solid',
-    borderRadius: 5,
+  },
+  inputFocused: {
+    borderBottomWidth: 2,
   },
 });
 

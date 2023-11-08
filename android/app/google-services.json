@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "105973453972",
+    "project_id": "quillmates-437b8",
+    "storage_bucket": "quillmates-437b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105973453972:android:492480fb5545b7ad059081",
+        "android_client_info": {
+          "package_name": "com.quillmatesfrontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpTEKOXwHvfaAYfxrQnelnFW04dB-R5Zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
