@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import InputField from '../components/InputField';
 import { NativeStackScreenProps } from 'react-native-screens/native-stack';
 import { UnauthenticatedStackParamList } from '../components/navigators/types/UnauthenticatedStackParamList';
@@ -14,7 +25,7 @@ type LoginProps = NativeStackScreenProps<
 const Login = ({ navigation }: LoginProps): JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -22,65 +33,81 @@ const Login = ({ navigation }: LoginProps): JSX.Element => {
   }, [email, password]);
 
   const handleLogin = async () => {
-    try {
-      auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          console.log('Logged in!');
-        })
-        .catch((err) => {
-          console.log('Error! - ' + err.code);
-        });
-      setEmail('');
-      setPassword('');
-    } catch (err) {
-      console.log(err);
+    if (!email || !password) {
+      setError('Please enter both email and password.');
+      return;
     }
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('Logged in!');
+      })
+      .catch(() => {
+        setError('Invalid credentials');
+      });
+    setEmail('');
+    setPassword('');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.formContainer}>
-        <View>
-          <Image
-            source={require('../../assets/quillmateslogo.jpg')}
-            style={styles.logo}
-          />
-          <InputField
-            label={'email'}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-          <InputField
-            label={'password'}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            secureTextEntry={true}
-          />
-        </View>
-        <View style={styles.errorContainer}>
-          {error.length > 0 && <Text style={styles.errorText}>{error}</Text>}
-        </View>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Register')}
-          >
-            <Text style={styles.buttonText}>No account? Register</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <SafeAreaView style={styles.main}>
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={StatusBar.currentHeight}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.formContainer}>
+              <View>
+                <Image
+                  source={require('../../assets/quillmateslogo.jpg')}
+                  style={styles.logo}
+                />
+                <InputField
+                  label={'email'}
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                />
+                <InputField
+                  label={'password'}
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  secureTextEntry={true}
+                />
+              </View>
+              <View style={styles.errorContainer}>
+                {error.length > 0 && (
+                  <Text style={styles.errorText}>{error}</Text>
+                )}
+              </View>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate('Register')}
+                >
+                  <Text style={styles.buttonText}>Go to sign-up</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     padding: 10,
+  },
+  container: {
+    flex: 1,
   },
   logo: {
     width: 250,
@@ -88,9 +115,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   formContainer: {
-    paddingTop: 10,
-    flex: 0.4,
-    justifyContent: 'space-between',
+    flex: 1,
+    justifyContent: 'center',
+    width: 250,
+    alignSelf: 'center',
   },
   errorContainer: {
     height: 20,
@@ -102,6 +130,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     marginTop: 30,
     flexDirection: 'row',
+    alignSelf: 'stretch',
     justifyContent: 'space-between',
   },
   button: {

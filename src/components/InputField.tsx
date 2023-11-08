@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TextInput,
   TextInputChangeEventData,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 type InputFieldProps = {
@@ -23,6 +24,13 @@ const InputField = ({
 }: InputFieldProps): JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
   const [hasText, setHasText] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  useEffect(() => {
+    if (value.length === 0) {
+      setHasText(false);
+    }
+  }, [value]);
 
   const handleTextChange = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
@@ -30,6 +38,10 @@ const InputField = ({
     const text = event.nativeEvent.text;
     onChangeText(text);
     text.length > 0 ? setHasText(true) : setHasText(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev); // Toggle password visibility
   };
 
   return (
@@ -45,7 +57,7 @@ const InputField = ({
       <TextInput
         style={[styles.input, isFocused ? styles.inputFocused : {}]}
         placeholder={isFocused ? '' : label}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={!isPasswordVisible && secureTextEntry}
         value={value}
         onChange={handleTextChange}
         onFocus={() => {
@@ -55,6 +67,14 @@ const InputField = ({
           setIsFocused(false);
         }}
       />
+      {secureTextEntry && (
+        <TouchableOpacity
+          style={styles.eyeButton}
+          onPress={togglePasswordVisibility}
+        >
+          <Text>{isPasswordVisible ? 'Hide' : 'Show'}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -81,6 +101,12 @@ const styles = StyleSheet.create({
   },
   inputFocused: {
     borderBottomWidth: 2,
+  },
+
+  eyeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 20,
   },
 });
 
