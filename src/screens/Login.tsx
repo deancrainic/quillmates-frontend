@@ -1,15 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import InputField from '../components/InputField';
 import { NativeStackScreenProps } from 'react-native-screens/native-stack';
 import { UnauthenticatedStackParamList } from '../components/navigators/types/UnauthenticatedStackParamList';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from '../context/AuthContext';
-import axios from '../services/api/axios';
-import { extractJwt } from '../services/jwtService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const LOGIN_URL = '/auth/login';
+import auth from '@react-native-firebase/auth';
 
 type LoginProps = NativeStackScreenProps<
   UnauthenticatedStackParamList,
@@ -19,8 +14,8 @@ type LoginProps = NativeStackScreenProps<
 const Login = ({ navigation }: LoginProps): JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     setError('');
@@ -28,13 +23,14 @@ const Login = ({ navigation }: LoginProps): JSX.Element => {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email, password }),
-      );
-      const auth = extractJwt(res.data.token);
-      await AsyncStorage.setItem('auth', JSON.stringify(auth));
-      setAuth(auth);
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('Logged in!');
+        })
+        .catch((err) => {
+          console.log('Error! - ' + err.code);
+        });
       setEmail('');
       setPassword('');
     } catch (err) {
