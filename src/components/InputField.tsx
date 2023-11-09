@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -72,7 +73,13 @@ const InputField = ({
           style={styles.eyeButton}
           onPress={togglePasswordVisibility}
         >
-          <Text>{isPasswordVisible ? 'Hide' : 'Show'}</Text>
+          <Text>
+            {isPasswordVisible ? (
+              <Icon name="eye-outline" size={23} color="#16715e" />
+            ) : (
+              <Icon name="eye-off-outline" size={23} color="#16715e" />
+            )}
+          </Text>
         </TouchableOpacity>
       )}
     </View>
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
   eyeButton: {
     position: 'absolute',
     right: 10,
-    top: 20,
+    top: 30,
   },
 });
 

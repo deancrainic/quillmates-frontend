@@ -50,53 +50,51 @@ const Login = ({ navigation }: LoginProps): JSX.Element => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.main}>
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={StatusBar.currentHeight}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.formContainer}>
-              <View>
-                <Image
-                  source={require('../../assets/quillmateslogo.jpg')}
-                  style={styles.logo}
-                />
-                <InputField
-                  label={'email'}
-                  value={email}
-                  onChangeText={(text) => setEmail(text)}
-                />
-                <InputField
-                  label={'password'}
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
-                  secureTextEntry={true}
-                />
-              </View>
-              <View style={styles.errorContainer}>
-                {error.length > 0 && (
-                  <Text style={styles.errorText}>{error}</Text>
-                )}
-              </View>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate('Register')}
-                >
-                  <Text style={styles.buttonText}>Go to sign-up</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-              </View>
+    <SafeAreaView style={styles.main}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={StatusBar.currentHeight}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.formContainer}>
+            <View>
+              <Image
+                source={require('../../assets/quillmateslogo.jpg')}
+                style={styles.logo}
+              />
+              <InputField
+                label={'email'}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+              />
+              <InputField
+                label={'password'}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                secureTextEntry={true}
+              />
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+            <View style={styles.errorContainer}>
+              {error.length > 0 && (
+                <Text style={styles.errorText}>{error}</Text>
+              )}
+            </View>
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate('Register')}
+              >
+                <Text style={styles.buttonText}>Go to sign-up</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
