@@ -41,12 +41,16 @@ const Register = ({ navigation }: RegisterProps): JSX.Element => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => console.log('Registered and logged in!'))
-      .catch(() => {
+      .catch((err) => {
         setError('Invalid credentials');
+        if (err.code === 'auth/invalid-email') {
+          setError('Invalid email address');
+        } else if (err.code === 'auth/email-already-in-use') {
+          setError('Email is already in use');
+        } else if (err.code === 'auth/weak-password') {
+          setError('Password is too weak');
+        }
       });
-
-    setEmail('');
-    setPassword('');
   };
 
   return (
