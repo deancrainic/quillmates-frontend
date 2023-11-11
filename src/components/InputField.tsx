@@ -15,6 +15,7 @@ type InputFieldProps = {
   value: string;
   secureTextEntry?: boolean;
   onChangeText: (text: any) => void;
+  editable?: boolean;
 };
 
 const InputField = ({
@@ -22,6 +23,7 @@ const InputField = ({
   value,
   onChangeText,
   secureTextEntry = false,
+  editable = true,
 }: InputFieldProps): JSX.Element => {
   const [isFocused, setIsFocused] = useState(false);
   const [hasText, setHasText] = useState(false);
@@ -67,6 +69,7 @@ const InputField = ({
         onBlur={() => {
           setIsFocused(false);
         }}
+        editable={editable}
       />
       {secureTextEntry && (
         <TouchableOpacity
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
     height: 70,
   },
   labelContainer: {
-    height: 15,
+    height: 17,
   },
   label: {
     fontSize: 14,

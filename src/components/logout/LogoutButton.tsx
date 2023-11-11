@@ -14,10 +14,15 @@ export default function LogoutButton() {
   return (
     <View>
       <TouchableOpacity onPress={handleLogout}>
-        <Text>Logout</Text>
+        <Text style={styles.fontText}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  fontText: {
+    padding: 10,
+    fontSize: 15,
+  },
+});
