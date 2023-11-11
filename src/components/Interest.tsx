@@ -40,7 +40,7 @@ export default function Interest({
             : styles.interest
         }
       >
-        <Icon name={icon} size={23} color="#16715e" />
+        <Icon name={icon} size={23} color="black" />
         <Text>{name}</Text>
       </View>
     </TouchableOpacity>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginBottom: 8,
     padding: 10,
-    backgroundColor: 'lightgray',
+    backgroundColor: '#f2f3f4',
     borderRadius: 5,
     alignItems: 'center',
     width: 180,
