@@ -4,11 +4,7 @@ import React from 'react';
 
 export default function LogoutButton() {
   const handleLogout = async () => {
-    try {
-      await auth().signOut();
-    } catch (error) {
-      console.log('Error from logout');
-    }
+    await auth().signOut();
   };
 
   return (

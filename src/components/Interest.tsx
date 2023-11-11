@@ -6,10 +6,20 @@ type InterestProps = {
   icon: string;
   name: string;
   onAdd: (name: string, selected: boolean) => void;
+  initialSelected: boolean;
 };
-export default function Interest({ icon, name, onAdd }: InterestProps) {
-  const [selected, setSelected] = useState(false);
+export default function Interest({
+  icon,
+  name,
+  onAdd,
+  initialSelected,
+}: InterestProps) {
+  const [selected, setSelected] = useState(initialSelected);
   const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    setSelected(initialSelected);
+  }, [initialSelected]);
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -20,14 +21,23 @@ import InputField from '../components/InputField';
 import Interest from '../components/Interest';
 import interestsList from '../utils/InterestsList';
 import auth from '@react-native-firebase/auth';
+import { UserDetailsContext } from '../contexts/UserDetailsContext';
 type ProfileProps = BottomTabScreenProps<AuthenticatedTabsParamList, 'Profile'>;
 
 const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   const { usernameEditable } = route.params;
+  const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
-  const [username, setUsername] = useState('');
-  const [quote, setQuote] = useState('');
-  const [interests, setInterests] = useState<string[]>([]);
+  const [username, setUsername] = useState(userDetails.username);
+  const [quote, setQuote] = useState(userDetails.quote);
+  const [interests, setInterests] = useState<string[]>(userDetails.interests);
+
+  useEffect(() => {
+    console.log(userDetails);
+    setUsername(userDetails.username);
+    setQuote(userDetails.quote);
+    setInterests(userDetails.interests);
+  }, [userDetails]);
 
   const onAddInterest = (name: string, selected: boolean) => {
     if (selected) {
@@ -40,9 +50,24 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   };
 
   const onSave = () => {
-    console.log(interests);
+    if (username.length === 0 || interests.length === 0) {
+      Alert.alert(
+        'Missing details :(',
+        'Please enter a username and select at least an interest',
+      );
+
+      return;
+    }
     const currentUser = auth().currentUser;
+
     firestore().collection('UserDetails').doc(currentUser?.uid).set({
+      username,
+      quote,
+      interests,
+    });
+
+    setUserDetails({
+      id: currentUser!.uid,
       username,
       quote,
       interests,
@@ -97,6 +122,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
                   key={item.name}
                   icon={item.icon}
                   name={item.name}
+                  initialSelected={interests.includes(item.name)}
                   onAdd={onAddInterest}
                 />
               ))}

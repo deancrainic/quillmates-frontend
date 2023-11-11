@@ -3,7 +3,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import AuthenticatedNav from './src/components/navigators/AuthenticatedNav';
 import UnauthenticatedNav from './src/components/navigators/UnauthenticatedNav';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-
+import UserDetailsProvider from './src/contexts/UserDetailsContext';
 const MyTheme = {
   ...DefaultTheme,
   colors: {
@@ -24,7 +24,13 @@ const App = (): JSX.Element => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      {user !== null ? <AuthenticatedNav /> : <UnauthenticatedNav />}
+      {user !== null ? (
+        <UserDetailsProvider>
+          <AuthenticatedNav />
+        </UserDetailsProvider>
+      ) : (
+        <UnauthenticatedNav />
+      )}
     </NavigationContainer>
   );
 };
