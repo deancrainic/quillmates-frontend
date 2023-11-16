@@ -32,6 +32,8 @@ const InputField = ({
   useEffect(() => {
     if (value.length === 0) {
       setHasText(false);
+    } else {
+      setHasText(true);
     }
   }, [value]);
 
