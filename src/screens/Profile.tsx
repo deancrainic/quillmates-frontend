@@ -19,7 +19,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { AuthenticatedTabsParamList } from '../components/navigators/types/AuthenticatedTabsParamList';
 import InputField from '../components/InputField';
 import Interest from '../components/Interest';
-import interestsList from '../utils/InterestsList';
+import interestsDictionary from '../utils/InterestsList';
 import auth from '@react-native-firebase/auth';
 import { UserDetailsContext } from '../contexts/UserDetailsContext';
 type ProfileProps = BottomTabScreenProps<AuthenticatedTabsParamList, 'Profile'>;
@@ -64,13 +64,17 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
       username,
       quote,
       interests,
+      ignoredUsers: userDetails.ignoredUsers,
     });
 
-    setUserDetails({
-      id: currentUser!.uid,
-      username,
-      quote,
-      interests,
+    setUserDetails((prevState) => {
+      return {
+        id: currentUser!.uid,
+        username,
+        quote,
+        interests,
+        ignoredUsers: prevState.ignoredUsers,
+      };
     });
   };
 
@@ -117,13 +121,13 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
               contentContainerStyle={styles.scrollContainer}
               style={styles.scroll}
             >
-              {interestsList.map((item) => (
+              {Object.keys(interestsDictionary).map((key) => (
                 <Interest
-                  key={item.name}
-                  icon={item.icon}
-                  name={item.name}
-                  initialSelected={interests.includes(item.name)}
+                  key={key}
+                  icon={interestsDictionary[key]}
+                  name={key}
                   onAdd={onAddInterest}
+                  initialSelected={interests.includes(key)}
                 />
               ))}
             </ScrollView>

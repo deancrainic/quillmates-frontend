@@ -3,39 +3,53 @@ export interface InterestData {
   name: string;
 }
 
-const interestsList: InterestData[] = [
-  { icon: 'movie', name: 'Cinematography' },
-  { icon: 'music', name: 'Music' },
-  { icon: 'book', name: 'Reading' },
-  { icon: 'brush', name: 'Art' },
-  { icon: 'file-code-outline', name: 'Coding' },
-  { icon: 'globe-model', name: 'Traveling' },
-  { icon: 'food-croissant', name: 'Cooking' },
-  { icon: 'dumbbell', name: 'Fitness' },
-  { icon: 'youtube-gaming', name: 'Gaming' },
-  { icon: 'headset-dock', name: 'Podcasts' },
-  { icon: 'translate', name: 'Languages' },
-  { icon: 'nature', name: 'Nature' },
-  { icon: 'camera', name: 'Photography' },
-  { icon: 'beer', name: 'Craft Beer' },
-  { icon: 'microphone', name: 'Singing' },
-  { icon: 'football', name: 'Sports' },
-  { icon: 'star', name: 'Stargazing' },
-  { icon: 'paw', name: 'Animals' },
-  { icon: 'car', name: 'Automobiles' },
-  { icon: 'coffee', name: 'Coffee' },
-  { icon: 'airplane', name: 'Aviation' },
-  { icon: 'drama-masks', name: 'Theater' },
-  { icon: 'shopping-outline', name: 'Shopping' },
-  { icon: 'scissors-cutting', name: 'Fashion' },
-  { icon: 'home', name: 'Interior Design' },
-  { icon: 'account-music', name: 'Concerts' },
-  { icon: 'bicycle', name: 'Cycling' },
-  { icon: 'mouse', name: 'Technology' },
-  { icon: 'television', name: 'TV Shows' },
-  { icon: 'glass-wine', name: 'Wine Tasting' },
-  { icon: 'zodiac-aquarius', name: 'Astrology' },
-  { icon: 'facebook', name: 'Social media' },
-];
+const interestsDictionary: Record<string, string> = {
+  Cinematography: 'movie',
+  Music: 'music',
+  Reading: 'book',
+  Art: 'brush',
+  Coding: 'file-code-outline',
+  Traveling: 'globe-model',
+  Cooking: 'food-croissant',
+  Fitness: 'dumbbell',
+  Gaming: 'youtube-gaming',
+  Podcasts: 'headset-dock',
+  Languages: 'translate',
+  Nature: 'nature',
+  Photography: 'camera',
+  'Craft Beer': 'beer',
+  Singing: 'microphone',
+  Sports: 'football',
+  Stargazing: 'star',
+  Animals: 'paw',
+  Automobiles: 'car',
+  Coffee: 'coffee',
+  Aviation: 'airplane',
+  Theater: 'drama-masks',
+  Shopping: 'shopping-outline',
+  Fashion: 'scissors-cutting',
+  'Interior Design': 'home',
+  Concerts: 'account-music',
+  Cycling: 'bicycle',
+  Technology: 'mouse',
+  'TV Shows': 'television',
+  'Wine Tasting': 'glass-wine',
+  Astrology: 'zodiac-aquarius',
+  'Social media': 'facebook',
+};
 
-export default interestsList;
+export const calculateInterestsScore = (
+  i_list1: string[],
+  i_list2: string[],
+): number => {
+  let common_interests = 0;
+  i_list1.forEach((i) => {
+    if (i_list2.includes(i)) {
+      common_interests++;
+    }
+  });
+
+  return common_interests;
+};
+
+export default interestsDictionary;

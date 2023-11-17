@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FindQuillmates from '../../screens/FindQuillmates';
 import MyQuillmates from '../../screens/MyQuillmates';
@@ -14,6 +14,8 @@ const Tab = createBottomTabNavigator<AuthenticatedTabsParamList>();
 
 const AuthenticatedNav = (): JSX.Element => {
   const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const userId = auth().currentUser!.uid;
     firestore()
@@ -21,15 +23,20 @@ const AuthenticatedNav = (): JSX.Element => {
       .doc(userId)
       .get()
       .then((details) => {
-        const storeDetails = details.data() as UserDetails;
-        storeDetails.id = userId;
-        setUserDetails(storeDetails);
+        if (details.exists) {
+          const storeDetails = details.data() as UserDetails;
+          storeDetails.id = userId;
+          setUserDetails(storeDetails);
+        }
+        setLoading(false);
       });
   }, []);
 
   return (
     <>
-      {userDetails.username.length > 0 ? (
+      {loading ? (
+        <></>
+      ) : userDetails.username.length > 0 ? (
         <Tab.Navigator initialRouteName={'MyQuillmates'}>
           <Tab.Screen
             name={'FindQuillmates'}
