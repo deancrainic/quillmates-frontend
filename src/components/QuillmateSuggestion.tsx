@@ -31,8 +31,9 @@ const QuillmateSuggestion = ({
 
         if (gestureState.dx > swipeDistanceThreshold) {
           onSwipeRight(quillmateDetails.id);
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
+          Animated.timing(pan, {
+            toValue: { x: -500, y: 0 }, // Adjust the destination position as needed
+            duration: 300, // Adjust the duration as needed
             useNativeDriver: false,
           }).start();
         } else if (gestureState.dx < -swipeDistanceThreshold) {
