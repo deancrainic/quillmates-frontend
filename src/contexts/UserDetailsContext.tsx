@@ -19,13 +19,13 @@ const defaultState = {
     quote: '',
     interests: [],
     ignoredUsers: [],
+    chats: [],
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUserDetails: (userDetails: UserDetails) => {},
 } as UserDetailsContextInterface;
 export const UserDetailsContext =
   createContext<UserDetailsContextInterface>(defaultState);
-
 type UserProviderProps = {
   children: ReactNode;
 };
@@ -37,6 +37,7 @@ export default function UserDetailsProvider({ children }: UserProviderProps) {
     quote: '',
     interests: [],
     ignoredUsers: [],
+    chats: [],
   });
   return (
     <UserDetailsContext.Provider value={{ userDetails, setUserDetails }}>

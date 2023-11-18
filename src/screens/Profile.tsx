@@ -65,6 +65,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
       quote,
       interests,
       ignoredUsers: userDetails.ignoredUsers,
+      chats: userDetails.chats,
     });
 
     setUserDetails((prevState) => {
@@ -74,6 +75,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
         quote,
         interests,
         ignoredUsers: prevState.ignoredUsers,
+        chats: prevState.chats,
       };
     });
   };

@@ -13,6 +13,7 @@ import { UserDetailsWithScore } from '../models/UserDetailsWithScore';
 import { calculateInterestsScore } from '../utils/InterestsList';
 import QuillmateSuggestion from '../components/QuillmateSuggestion';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import UserDetails from '../models/UserDetails';
 
 const FindQuillmates = (): JSX.Element => {
   const [suggestions, setSuggestions] = useState<UserDetailsWithScore[]>([]);
@@ -30,6 +31,47 @@ const FindQuillmates = (): JSX.Element => {
       return {
         ...prevState,
         ignoredUsers: [...prevState.ignoredUsers, userId],
+      };
+    });
+  };
+
+  const handleSwipeRight = (userId: string) => {
+    setUserDetails((prevState) => {
+      const chatId = prevState.id + '_' + userId;
+
+      firestore()
+        .collection('Chats')
+        .doc(chatId)
+        .set({
+          messages: [
+            { content: 'Hi', sent: new Date(), sentBy: userDetails.id },
+          ],
+        })
+        .then(async () => {
+          await firestore()
+            .collection('UserDetails')
+            .doc(prevState.id)
+            .update({
+              chats: [...prevState.chats, chatId],
+            });
+
+          const userData = await firestore()
+            .collection('UserDetails')
+            .doc(userId)
+            .get();
+
+          const oldChats = (userData.data() as UserDetails).chats;
+          await firestore()
+            .collection('UserDetails')
+            .doc(userId)
+            .update({
+              chats: [...oldChats, chatId],
+            });
+        });
+
+      return {
+        ...prevState,
+        chats: [...prevState.chats, chatId],
       };
     });
   };
@@ -78,7 +120,7 @@ const FindQuillmates = (): JSX.Element => {
             <QuillmateSuggestion
               quillmateDetails={suggestion}
               key={suggestion.id}
-              onSwipeRight={() => console.log('SWIPED RIGHT')}
+              onSwipeRight={handleSwipeRight}
               onSwipeLeft={handleSwipeLeft}
             />
           ))}
