@@ -37,41 +37,71 @@ const FindQuillmates = (): JSX.Element => {
 
   const handleSwipeRight = (userId: string) => {
     setUserDetails((prevState) => {
-      const chatId = prevState.id + '_' + userId;
+      const dateSent = new Date();
 
       firestore()
-        .collection('Chats')
-        .doc(chatId)
-        .set({
-          messages: [
-            { content: 'Hi', sent: new Date(), sentBy: userDetails.id },
+        .collection('UserDetails')
+        .doc(prevState.id)
+        .update({
+          chats: [
+            ...prevState.chats,
+            {
+              users: [prevState.id, userId],
+              messages: [
+                {
+                  content: 'Hi!',
+                  sentBy: prevState.id,
+                  sentAt: dateSent,
+                },
+              ],
+            },
           ],
         })
-        .then(async () => {
-          await firestore()
-            .collection('UserDetails')
-            .doc(prevState.id)
-            .update({
-              chats: [...prevState.chats, chatId],
-            });
-
-          const userData = await firestore()
+        .then(() => {
+          firestore()
             .collection('UserDetails')
             .doc(userId)
-            .get();
-
-          const oldChats = (userData.data() as UserDetails).chats;
-          await firestore()
-            .collection('UserDetails')
-            .doc(userId)
-            .update({
-              chats: [...oldChats, chatId],
+            .get()
+            .then((data) => {
+              return (data.data() as UserDetails).chats;
+            })
+            .then((prevChats) => {
+              firestore()
+                .collection('UserDetails')
+                .doc(userId)
+                .update({
+                  chats: [
+                    ...prevChats,
+                    {
+                      users: [userId, prevState.id],
+                      messages: [
+                        {
+                          content: 'Hi!',
+                          sentBy: prevState.id,
+                          sentAt: dateSent,
+                        },
+                      ],
+                    },
+                  ],
+                });
             });
         });
 
       return {
         ...prevState,
-        chats: [...prevState.chats, chatId],
+        chats: [
+          ...prevState.chats,
+          {
+            users: [prevState.id, userId],
+            messages: [
+              {
+                content: 'Hi!',
+                sentBy: prevState.id,
+                sentAt: dateSent,
+              },
+            ],
+          },
+        ],
       };
     });
   };
@@ -99,6 +129,13 @@ const FindQuillmates = (): JSX.Element => {
             continue;
           }
 
+          if (
+            userDetails.chats.filter((c) => c.users?.includes(userData.id))
+              .length > 0
+          ) {
+            continue;
+          }
+
           users.push(userData);
         }
 
@@ -108,6 +145,7 @@ const FindQuillmates = (): JSX.Element => {
   };
 
   useEffect(() => {
+    console.log('FindQuillamtes updated');
     onUpdate();
   }, [userDetails]);
 

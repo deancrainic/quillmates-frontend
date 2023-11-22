@@ -22,6 +22,7 @@ import Interest from '../components/Interest';
 import interestsDictionary from '../utils/InterestsList';
 import auth from '@react-native-firebase/auth';
 import { UserDetailsContext } from '../contexts/UserDetailsContext';
+
 type ProfileProps = BottomTabScreenProps<AuthenticatedTabsParamList, 'Profile'>;
 
 const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
@@ -33,7 +34,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   const [interests, setInterests] = useState<string[]>(userDetails.interests);
 
   useEffect(() => {
-    console.log(userDetails);
+    console.log('Profile updated');
     setUsername(userDetails.username);
     setQuote(userDetails.quote);
     setInterests(userDetails.interests);
