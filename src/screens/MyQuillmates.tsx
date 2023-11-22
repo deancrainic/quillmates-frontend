@@ -1,8 +1,22 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect } from 'react';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { ChatStackParamList } from '../components/navigators/types/ChatStackParamList';
+import ChatList from '../components/chat/ChatList';
+import Chat from '../components/chat/Chat';
+
+const Stack = createNativeStackNavigator<ChatStackParamList>();
 
 const MyQuillmates = (): JSX.Element => {
-  return <View />;
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name={'ChatList'}
+        component={ChatList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={'Chat'} component={Chat} />
+    </Stack.Navigator>
+  );
 };
 
 export default MyQuillmates;

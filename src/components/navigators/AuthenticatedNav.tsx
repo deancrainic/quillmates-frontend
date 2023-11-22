@@ -21,13 +21,13 @@ const AuthenticatedNav = (): JSX.Element => {
     firestore()
       .collection('UserDetails')
       .doc(userId)
-      .get()
-      .then((details) => {
-        if (details.exists) {
-          const storeDetails = details.data() as UserDetails;
+      .onSnapshot((docSnapshot) => {
+        if (docSnapshot.exists) {
+          const storeDetails = docSnapshot.data() as UserDetails;
           storeDetails.id = userId;
           setUserDetails(storeDetails);
         }
+
         setLoading(false);
       });
   }, []);
