@@ -1,19 +1,44 @@
 import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserDetailsContext } from '../../contexts/UserDetailsContext';
 import ChatListMember from './ChatListMember';
+import { ChatDetails } from '../../models/ChatDetails';
+import { NativeStackScreenProps } from 'react-native-screens/native-stack';
+import { ChatStackParamList } from '../navigators/types/ChatStackParamList';
 
-const ChatList = (): JSX.Element => {
+type ChatListProps = NativeStackScreenProps<ChatStackParamList, 'ChatList'>;
+const ChatList = ({ navigation }: ChatListProps): JSX.Element => {
   const { userDetails } = useContext(UserDetailsContext);
+
+  const getSortedChats = () => {
+    return userDetails.chats.sort(
+      (a, b) =>
+        b.messages[b.messages.length - 1].sentAt.toDate().getTime() -
+        a.messages[a.messages.length - 1].sentAt.toDate().getTime(),
+    );
+  };
+
+  const handlePress = (userChat: ChatDetails) => {
+    navigation.navigate('Chat', {
+      userChat,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.main}>
-      <ScrollView style={styles.listContainer}>
-        {userDetails.chats.map((chat, index) => (
-          <ChatListMember key={index} chatDetails={chat} />
-        ))}
-      </ScrollView>
+      <View style={styles.main}>
+        <Text style={styles.header}>Chats</Text>
+        <ScrollView style={styles.listContainer}>
+          {getSortedChats().map((chat, index) => (
+            <ChatListMember
+              key={index}
+              chatDetails={chat}
+              handlePress={handlePress}
+            />
+          ))}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -24,6 +49,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+  },
+  header: {
+    fontSize: 30,
+    padding: 20,
   },
 });
 

@@ -14,6 +14,7 @@ import { calculateInterestsScore } from '../utils/InterestsList';
 import QuillmateSuggestion from '../components/QuillmateSuggestion';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import UserDetails from '../models/UserDetails';
+import { Timestamp } from '@react-native-firebase/firestore/lib/modular/Timestamp';
 
 const FindQuillmates = (): JSX.Element => {
   const [suggestions, setSuggestions] = useState<UserDetailsWithScore[]>([]);
@@ -51,7 +52,7 @@ const FindQuillmates = (): JSX.Element => {
                 {
                   content: 'Hi!',
                   sentBy: prevState.id,
-                  sentAt: dateSent,
+                  sentAt: Timestamp.fromDate(dateSent),
                 },
               ],
             },
@@ -78,7 +79,7 @@ const FindQuillmates = (): JSX.Element => {
                         {
                           content: 'Hi!',
                           sentBy: prevState.id,
-                          sentAt: dateSent,
+                          sentAt: Timestamp.fromDate(dateSent),
                         },
                       ],
                     },
@@ -97,7 +98,7 @@ const FindQuillmates = (): JSX.Element => {
               {
                 content: 'Hi!',
                 sentBy: prevState.id,
-                sentAt: dateSent,
+                sentAt: Timestamp.fromDate(dateSent),
               },
             ],
           },
@@ -145,7 +146,6 @@ const FindQuillmates = (): JSX.Element => {
   };
 
   useEffect(() => {
-    console.log('FindQuillamtes updated');
     onUpdate();
   }, [userDetails]);
 

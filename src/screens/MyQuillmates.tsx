@@ -14,7 +14,11 @@ const MyQuillmates = (): JSX.Element => {
         component={ChatList}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={'Chat'} component={Chat} />
+      <Stack.Screen
+        name={'Chat'}
+        component={Chat}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

@@ -34,7 +34,6 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   const [interests, setInterests] = useState<string[]>(userDetails.interests);
 
   useEffect(() => {
-    console.log('Profile updated');
     setUsername(userDetails.username);
     setQuote(userDetails.quote);
     setInterests(userDetails.interests);
