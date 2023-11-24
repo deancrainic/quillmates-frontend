@@ -20,6 +20,7 @@ const defaultState = {
     interests: [],
     ignoredUsers: [],
     chats: [],
+    country: '',
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setUserDetails: (userDetails: UserDetails) => {},
@@ -38,6 +39,7 @@ export default function UserDetailsProvider({ children }: UserProviderProps) {
     interests: [],
     ignoredUsers: [],
     chats: [],
+    country: '',
   });
   return (
     <UserDetailsContext.Provider value={{ userDetails, setUserDetails }}>

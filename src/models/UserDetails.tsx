@@ -5,4 +5,5 @@ export default interface UserDetails {
   interests: string[];
   ignoredUsers: string[];
   chats: string[];
+  country: string;
 }

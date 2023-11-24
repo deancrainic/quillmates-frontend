@@ -46,6 +46,7 @@ const AuthenticatedNav = (): JSX.Element => {
               tabBarIcon: () => (
                 <Icon name={'people-circle'} size={27} color="#16715e" />
               ),
+              tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },
             }}
           />
@@ -72,6 +73,7 @@ const AuthenticatedNav = (): JSX.Element => {
               tabBarIcon: () => (
                 <Icon name={'person'} size={23} color="#16715e" />
               ),
+              tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },
             }}
             initialParams={{ usernameEditable: true }}
@@ -87,6 +89,7 @@ const AuthenticatedNav = (): JSX.Element => {
               tabBarIcon: () => (
                 <Icon name={'person'} size={23} color="#16715e" />
               ),
+              tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },
             }}
             initialParams={{ usernameEditable: true }}

@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Button,
+  PermissionsAndroid,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import LogoutButton from '../components/logout/LogoutButton';
@@ -22,6 +24,7 @@ import Interest from '../components/Interest';
 import interestsDictionary from '../utils/InterestsList';
 import auth from '@react-native-firebase/auth';
 import { UserDetailsContext } from '../contexts/UserDetailsContext';
+import Geolocation from 'react-native-geolocation-service';
 type ProfileProps = BottomTabScreenProps<AuthenticatedTabsParamList, 'Profile'>;
 
 const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
@@ -50,10 +53,14 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   };
 
   const onSave = () => {
-    if (username.length === 0 || interests.length === 0) {
+    if (
+      username.length === 0 ||
+      interests.length === 0 ||
+      !userDetails.country
+    ) {
       Alert.alert(
         'Missing details :(',
-        'Please enter a username and select at least an interest',
+        'Please enter a username and select at least an interest and press the button for getting the location',
       );
 
       return;
@@ -76,8 +83,59 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
         interests,
         ignoredUsers: prevState.ignoredUsers,
         chats: prevState.chats,
+        country: prevState.country,
       };
     });
+  };
+
+  const locationPermissionStatus = async function requestPermissions() {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log(latitude, longitude);
+            fetch(
+              `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=9c82528e42414a968283acf2f0a3dd45`,
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                // Extract country information from the response
+                const country = data.results[0].components.country;
+                // const countryObj = addressComponents.find(
+                //   (component: { types: string[] }) =>
+                //     component.types.includes('country'),
+                // );
+
+                if (country) {
+                  console.log(country);
+                  setUserDetails((prevState) => {
+                    return {
+                      id: prevState.id,
+                      username: prevState.username,
+                      quote: prevState.quote,
+                      interests: prevState.interests,
+                      ignoredUsers: prevState.ignoredUsers,
+                      chats: prevState.chats,
+                      country: country,
+                    };
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error('Error fetching geolocation data:', error);
+              });
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        );
+      }
+    }
   };
 
   return (
@@ -112,6 +170,14 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
                 value={quote}
                 onChangeText={(text) => setQuote(text)}
                 editable={true}
+              />
+            </View>
+
+            <View style={styles.locationBtn}>
+              <Button
+                title="Use my location"
+                color="green"
+                onPress={locationPermissionStatus}
               />
             </View>
 
@@ -179,6 +245,10 @@ const styles = StyleSheet.create({
 
   textButton: {
     fontSize: 15,
+  },
+
+  locationBtn: {
+    padding: 15,
   },
 });
 
