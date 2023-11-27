@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ChatDetailsWithId } from '../../models/ChatDetails';
+import firestore from '@react-native-firebase/firestore';
 
 type ChatListMemberProps = {
   chatDetails: ChatDetailsWithId;
-  handlePress: (userChat: ChatDetailsWithId) => void;
+  handlePress: (username: string, userChat: ChatDetailsWithId) => void;
 };
 const ChatListMember = ({
   chatDetails,
   handlePress,
 }: ChatListMemberProps): JSX.Element => {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    firestore()
+      .collection('UserDetails')
+      .doc(chatDetails.users.split('_')[1])
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setUsername(doc.data()?.username);
+        }
+      });
+  }, []);
+
   const onPress = () => {
-    handlePress(chatDetails);
+    handlePress(username, chatDetails);
   };
 
   const renderSender = () => {
@@ -48,7 +63,7 @@ const ChatListMember = ({
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text>{chatDetails.users.split('_')[1]}</Text>
+      <Text>{username}</Text>
       <View style={styles.messageContainer}>
         <View style={styles.message}>
           <Text>{renderSender()}</Text>

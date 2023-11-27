@@ -15,6 +15,7 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
   const [userChat, setUserChat] = useState<ChatDetailsWithId>(
     route.params.userChat,
   );
+  const [username, setUsername] = useState<string>(route.params.username);
 
   const convertMessages = (chat: ChatDetailsWithId) => {
     let messages: IMessage[] = [];
@@ -88,7 +89,7 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
   return (
     <SafeAreaView style={styles.main}>
       <ChatHeader
-        username={userChat.users.split('_')[1]}
+        username={username}
         handleBack={() => navigation.navigate('ChatList')}
       />
       <GiftedChat

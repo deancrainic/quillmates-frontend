@@ -26,8 +26,9 @@ const ChatList = ({ navigation }: ChatListProps): JSX.Element => {
       );
   };
 
-  const handlePress = (userChat: ChatDetailsWithId) => {
+  const handlePress = (username: string, userChat: ChatDetailsWithId) => {
     navigation.navigate('Chat', {
+      username,
       userChat,
     });
   };
