@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { NativeStackScreenProps } from 'react-native-screens/native-stack';
 import { ChatStackParamList } from '../navigators/types/ChatStackParamList';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ChatHeader from './ChatHeader';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { StyleSheet } from 'react-native';
+import { Timestamp } from '@react-native-firebase/firestore/lib/modular/Timestamp';
+import { ChatDetailsWithId } from '../../models/ChatDetails';
+import { Message } from '../../models/Message';
+import firestore from '@react-native-firebase/firestore';
 
 type ChatProps = NativeStackScreenProps<ChatStackParamList, 'Chat'>;
 const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
-  const { userChat } = route.params;
+  const [userChat, setUserChat] = useState<ChatDetailsWithId>(
+    route.params.userChat,
+  );
 
-  const convertMessages = () => {
+  const convertMessages = (chat: ChatDetailsWithId) => {
     let messages: IMessage[] = [];
 
-    userChat.messages.forEach((m, index) => {
+    chat.messages.forEach((m, index) => {
       messages.push({
         _id: index,
         text: m.content,
@@ -21,7 +27,6 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
         user: {
           _id: m.sentBy,
           name: m.sentBy,
-          avatar: 'https://placeimg.com/140/140/any',
         },
       });
     });
@@ -32,17 +37,65 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
     );
   };
 
+  const handleMessage = useCallback((sentMessages: IMessage[]) => {
+    setUserChat((prevState) => {
+      firestore()
+        .collection('UserDetails')
+        .doc(prevState.users.split('_')[0])
+        .collection('chats')
+        .doc(prevState.id)
+        .update({
+          messages: [
+            ...prevState.messages,
+            {
+              content: sentMessages[0].text,
+              sentBy: sentMessages[0].user._id,
+              sentAt: Timestamp.fromDate(sentMessages[0].createdAt as Date),
+            } as Message,
+          ],
+        });
+
+      firestore()
+        .collection('UserDetails')
+        .doc(prevState.users.split('_')[1])
+        .collection('chats')
+        .doc(prevState.id)
+        .update({
+          messages: [
+            ...prevState.messages,
+            {
+              content: sentMessages[0].text,
+              sentBy: sentMessages[0].user._id,
+              sentAt: Timestamp.fromDate(sentMessages[0].createdAt as Date),
+            } as Message,
+          ],
+        });
+
+      return {
+        ...prevState,
+        messages: [
+          ...prevState.messages,
+          {
+            content: sentMessages[0].text,
+            sentBy: sentMessages[0].user._id,
+            sentAt: Timestamp.fromDate(sentMessages[0].createdAt as Date),
+          } as Message,
+        ],
+      };
+    });
+  }, []);
+
   return (
     <SafeAreaView style={styles.main}>
       <ChatHeader
-        username={userChat.users[1]}
+        username={userChat.users.split('_')[1]}
         handleBack={() => navigation.navigate('ChatList')}
       />
       <GiftedChat
-        messages={convertMessages()}
-        onSend={() => console.log('SENT')}
+        messages={convertMessages(userChat)}
+        onSend={handleMessage}
         user={{
-          _id: userChat.users[0],
+          _id: userChat.users.split('_')[0],
         }}
       />
     </SafeAreaView>

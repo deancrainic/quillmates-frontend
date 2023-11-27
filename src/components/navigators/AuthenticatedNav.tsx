@@ -9,6 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import UserDetails from '../../models/UserDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ChatDetails, ChatDetailsWithId } from '../../models/ChatDetails';
 
 const Tab = createBottomTabNavigator<AuthenticatedTabsParamList>();
 
@@ -25,10 +26,48 @@ const AuthenticatedNav = (): JSX.Element => {
         if (docSnapshot.exists) {
           const storeDetails = docSnapshot.data() as UserDetails;
           storeDetails.id = userId;
-          setUserDetails(storeDetails);
-        }
 
-        setLoading(false);
+          const chatsCollectionRef = docSnapshot.ref.collection('chats');
+          chatsCollectionRef.get().then((chatsQuerySnapshot) => {
+            const chatsData: ChatDetailsWithId[] = [];
+
+            chatsQuerySnapshot.forEach((chatDoc) => {
+              const data: ChatDetailsWithId = {
+                ...(chatDoc.data() as ChatDetails),
+                id: chatDoc.id,
+              };
+
+              chatsData.push(data);
+            });
+
+            storeDetails.chats = chatsData;
+            setUserDetails(storeDetails);
+            setLoading(false);
+          });
+        }
+      });
+
+    firestore()
+      .collection('UserDetails')
+      .doc(userId)
+      .collection('chats')
+      .onSnapshot((chatsSnapshot) => {
+        if (!chatsSnapshot.empty) {
+          const chatsData: ChatDetailsWithId[] = [];
+
+          chatsSnapshot.forEach((chatDoc) => {
+            const data: ChatDetailsWithId = {
+              ...(chatDoc.data() as ChatDetails),
+              id: chatDoc.id,
+            };
+
+            chatsData.push(data);
+          });
+
+          setUserDetails((prevState) => {
+            return { ...prevState, chats: chatsData };
+          });
+        }
       });
   }, []);
 

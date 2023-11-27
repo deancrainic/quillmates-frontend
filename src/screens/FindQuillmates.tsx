@@ -13,7 +13,6 @@ import { UserDetailsWithScore } from '../models/UserDetailsWithScore';
 import { calculateInterestsScore } from '../utils/InterestsList';
 import QuillmateSuggestion from '../components/QuillmateSuggestion';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import UserDetails from '../models/UserDetails';
 import { Timestamp } from '@react-native-firebase/firestore/lib/modular/Timestamp';
 
 const FindQuillmates = (): JSX.Element => {
@@ -39,22 +38,20 @@ const FindQuillmates = (): JSX.Element => {
   const handleSwipeRight = (userId: string) => {
     setUserDetails((prevState) => {
       const dateSent = new Date();
+      const chatId = prevState.id + userId;
 
       firestore()
         .collection('UserDetails')
         .doc(prevState.id)
-        .update({
-          chats: [
-            ...prevState.chats,
+        .collection('chats')
+        .doc(chatId)
+        .set({
+          users: `${prevState.id}_${userId}`,
+          messages: [
             {
-              users: [prevState.id, userId],
-              messages: [
-                {
-                  content: 'Hi!',
-                  sentBy: prevState.id,
-                  sentAt: Timestamp.fromDate(dateSent),
-                },
-              ],
+              content: 'Hi!',
+              sentBy: prevState.id,
+              sentAt: Timestamp.fromDate(dateSent),
             },
           ],
         })
@@ -62,29 +59,17 @@ const FindQuillmates = (): JSX.Element => {
           firestore()
             .collection('UserDetails')
             .doc(userId)
-            .get()
-            .then((data) => {
-              return (data.data() as UserDetails).chats;
-            })
-            .then((prevChats) => {
-              firestore()
-                .collection('UserDetails')
-                .doc(userId)
-                .update({
-                  chats: [
-                    ...prevChats,
-                    {
-                      users: [userId, prevState.id],
-                      messages: [
-                        {
-                          content: 'Hi!',
-                          sentBy: prevState.id,
-                          sentAt: Timestamp.fromDate(dateSent),
-                        },
-                      ],
-                    },
-                  ],
-                });
+            .collection('chats')
+            .doc(chatId)
+            .set({
+              users: `${userId}_${prevState.id}`,
+              messages: [
+                {
+                  content: 'Hi!',
+                  sentBy: prevState.id,
+                  sentAt: Timestamp.fromDate(dateSent),
+                },
+              ],
             });
         });
 
@@ -93,7 +78,8 @@ const FindQuillmates = (): JSX.Element => {
         chats: [
           ...prevState.chats,
           {
-            users: [prevState.id, userId],
+            id: chatId,
+            users: `${prevState.id}_${userId}`,
             messages: [
               {
                 content: 'Hi!',

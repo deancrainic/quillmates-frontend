@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ChatDetails } from '../../models/ChatDetails';
+import { ChatDetailsWithId } from '../../models/ChatDetails';
 
 type ChatListMemberProps = {
-  chatDetails: ChatDetails;
-  handlePress: (userChat: ChatDetails) => void;
+  chatDetails: ChatDetailsWithId;
+  handlePress: (userChat: ChatDetailsWithId) => void;
 };
 const ChatListMember = ({
   chatDetails,
@@ -16,7 +16,7 @@ const ChatListMember = ({
 
   const renderSender = () => {
     return chatDetails.messages.slice(chatDetails.messages.length - 1)[0]
-      .sentBy === chatDetails.users[0]
+      .sentBy === chatDetails.users.split('_')[0]
       ? 'You: '
       : 'Them: ';
   };
@@ -48,7 +48,7 @@ const ChatListMember = ({
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text>{chatDetails.users[1]}</Text>
+      <Text>{chatDetails.users.split('_')[1]}</Text>
       <View style={styles.messageContainer}>
         <View style={styles.message}>
           <Text>{renderSender()}</Text>
