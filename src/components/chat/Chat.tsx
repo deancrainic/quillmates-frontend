@@ -26,7 +26,7 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
         createdAt: m.sentAt.toDate(),
         user: {
           _id: m.sentBy,
-          name: 'q',
+          name: username,
         },
       });
     });

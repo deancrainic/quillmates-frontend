@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  Button,
   PermissionsAndroid,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
@@ -35,11 +34,13 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   const [username, setUsername] = useState(userDetails.username);
   const [quote, setQuote] = useState(userDetails.quote);
   const [interests, setInterests] = useState<string[]>(userDetails.interests);
+  const [country, setCountry] = useState(userDetails.country);
 
   useEffect(() => {
     setUsername(userDetails.username);
     setQuote(userDetails.quote);
     setInterests(userDetails.interests);
+    setCountry(userDetails.country);
   }, [userDetails]);
 
   const onAddInterest = (name: string, selected: boolean) => {
@@ -56,7 +57,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
     if (
       username.length === 0 ||
       interests.length === 0 ||
-      !userDetails.country
+      country.length === 0
     ) {
       Alert.alert(
         'Missing details :(',
@@ -67,14 +68,15 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
     }
     const currentUser = auth().currentUser;
 
-    firestore().collection('UserDetails').doc(currentUser?.uid).set({
-      username,
-      quote,
-      interests,
-      ignoredUsers: userDetails.ignoredUsers,
-    });
-
     setUserDetails((prevState) => {
+      firestore().collection('UserDetails').doc(currentUser?.uid).set({
+        username,
+        quote,
+        interests,
+        ignoredUsers: prevState.ignoredUsers,
+        country,
+      });
+
       return {
         id: currentUser!.uid,
         username,
@@ -82,7 +84,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
         interests,
         ignoredUsers: prevState.ignoredUsers,
         chats: prevState.chats,
-        country: prevState.country,
+        country,
       };
     });
   };
@@ -102,21 +104,11 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
             )
               .then((response) => response.json())
               .then((data) => {
-                const country = data.results[0].components.country;
+                const currentCountry = data.results[0].components.country;
 
-                if (country) {
-                  console.log(country);
-                  setUserDetails((prevState) => {
-                    return {
-                      id: prevState.id,
-                      username: prevState.username,
-                      quote: prevState.quote,
-                      interests: prevState.interests,
-                      ignoredUsers: prevState.ignoredUsers,
-                      chats: prevState.chats,
-                      country: country,
-                    };
-                  });
+                if (currentCountry) {
+                  console.log(currentCountry);
+                  setCountry(currentCountry);
                 }
               })
               .catch((error) => {
