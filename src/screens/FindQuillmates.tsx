@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     flex: 0.96,
   },
   header: {
+    color: '#1a3e56',
     fontSize: 30,
     padding: 10,
   },

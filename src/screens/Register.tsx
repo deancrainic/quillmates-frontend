@@ -64,7 +64,7 @@ const Register = ({ navigation }: RegisterProps): JSX.Element => {
           <View style={styles.formContainer}>
             <View>
               <Image
-                source={require('../../assets/quillmateslogo.jpg')}
+                source={require('../../assets/quillIcon.jpg')}
                 style={styles.logo}
               />
               <InputField
@@ -85,15 +85,11 @@ const Register = ({ navigation }: RegisterProps): JSX.Element => {
               )}
             </View>
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('Login')}
-              >
-                <Text style={styles.buttonText}>Go to login</Text>
-              </TouchableOpacity>
-
               <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Sign up</Text>
+                <Text style={styles.buttonText}>Register</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.belowButton}>Go to sign-in</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -131,19 +127,24 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     marginTop: 30,
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    justifyContent: 'space-between',
   },
   button: {
-    backgroundColor: '#16715e',
+    alignItems: 'center',
+    width: 200,
+    alignSelf: 'center',
+    backgroundColor: '#a38b48',
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   buttonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  belowButton: {
+    marginTop: 4,
+    alignSelf: 'center',
+    color: '#1a3e56',
   },
 });
-
 export default Register;

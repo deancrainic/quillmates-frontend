@@ -60,7 +60,7 @@ const Login = ({ navigation }: LoginProps): JSX.Element => {
           <View style={styles.formContainer}>
             <View>
               <Image
-                source={require('../../assets/quillmateslogo.jpg')}
+                source={require('../../assets/quillIcon.jpg')}
                 style={styles.logo}
               />
               <InputField
@@ -81,15 +81,11 @@ const Login = ({ navigation }: LoginProps): JSX.Element => {
               )}
             </View>
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('Register')}
-              >
-                <Text style={styles.buttonText}>Go to sign-up</Text>
-              </TouchableOpacity>
-
               <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.belowButton}>Go to sign-up</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -127,18 +123,24 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     marginTop: 30,
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    justifyContent: 'space-between',
   },
   button: {
-    backgroundColor: '#16715e',
+    alignItems: 'center',
+    width: 200,
+    alignSelf: 'center',
+    backgroundColor: '#a38b48',
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   buttonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  belowButton: {
+    marginTop: 4,
+    alignSelf: 'center',
+    color: '#1a3e56',
   },
 });
 

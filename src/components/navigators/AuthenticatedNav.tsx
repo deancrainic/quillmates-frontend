@@ -78,14 +78,22 @@ const AuthenticatedNav = (): JSX.Element => {
       {loading ? (
         <></>
       ) : userDetails.username.length > 0 ? (
-        <Tab.Navigator initialRouteName={'MyQuillmates'}>
+        <Tab.Navigator
+          initialRouteName={'MyQuillmates'}
+          screenOptions={{
+            tabBarActiveBackgroundColor: '#c0d7e7',
+            tabBarInactiveBackgroundColor: '#FFFFFF',
+            tabBarLabelStyle: { color: 'black', fontSize: 11 },
+            tabBarHideOnKeyboard: true,
+          }}
+        >
           <Tab.Screen
             name={'FindQuillmates'}
             component={FindQuillmates}
             options={{
               headerShown: false,
               tabBarIcon: () => (
-                <Icon name={'people-circle'} size={27} color="#16715e" />
+                <Icon name={'people-circle'} size={27} color="#1a3e56" />
               ),
               tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },
@@ -100,7 +108,7 @@ const AuthenticatedNav = (): JSX.Element => {
                 <Icon
                   name={'chatbubble-ellipses-sharp'}
                   size={27}
-                  color="#16715e"
+                  color="#1a3e56"
                 />
               ),
               tabBarHideOnKeyboard: true,
@@ -113,7 +121,7 @@ const AuthenticatedNav = (): JSX.Element => {
             options={{
               headerShown: false,
               tabBarIcon: () => (
-                <Icon name={'person'} size={23} color="#16715e" />
+                <Icon name={'person'} size={23} color="#1a3e56" />
               ),
               tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },
@@ -129,7 +137,7 @@ const AuthenticatedNav = (): JSX.Element => {
             options={{
               headerShown: false,
               tabBarIcon: () => (
-                <Icon name={'person'} size={23} color="#16715e" />
+                <Icon name={'person'} size={23} color="#1a3e56" />
               ),
               tabBarHideOnKeyboard: true,
               tabBarLabelStyle: { color: 'black', fontSize: 11 },

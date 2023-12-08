@@ -63,7 +63,7 @@ const ChatListMember = ({
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text>{username}</Text>
+      <Text style={{ fontSize: 17, color: '#1a3e56' }}>{username}</Text>
       <View style={styles.messageContainer}>
         <View style={styles.message}>
           <Text>{renderSender()}</Text>
@@ -77,10 +77,11 @@ const ChatListMember = ({
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: 10,
     backgroundColor: 'white',
     borderBottomColor: 'darkgray',
     borderBottomWidth: 1,
-    padding: 10,
+    padding: 15,
   },
   messageContainer: {
     flexDirection: 'row',

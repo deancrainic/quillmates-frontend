@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContainer: {
-    flex: 1,
+    flex: 0.9,
   },
   header: {
+    flex: 0.1,
     fontSize: 30,
     padding: 20,
+    color: '#1a3e56',
   },
 });
 
