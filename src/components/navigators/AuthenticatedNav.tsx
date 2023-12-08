@@ -44,9 +44,9 @@ const AuthenticatedNav = (): JSX.Element => {
             setUserDetails(storeDetails);
             setLoading(false);
           });
+        } else {
+          setLoading(false);
         }
-
-        setLoading(false);
       });
 
     firestore()

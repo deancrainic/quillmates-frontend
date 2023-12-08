@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { NativeStackScreenProps } from 'react-native-screens/native-stack';
 import { ChatStackParamList } from '../navigators/types/ChatStackParamList';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,12 +9,11 @@ import { Timestamp } from '@react-native-firebase/firestore/lib/modular/Timestam
 import { ChatDetailsWithId } from '../../models/ChatDetails';
 import { Message } from '../../models/Message';
 import firestore from '@react-native-firebase/firestore';
+import { UserChatContext } from '../../contexts/UserChatContext';
 
 type ChatProps = NativeStackScreenProps<ChatStackParamList, 'Chat'>;
 const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
-  const [userChat, setUserChat] = useState<ChatDetailsWithId>(
-    route.params.userChat,
-  );
+  const { userChat, setUserChat } = useContext(UserChatContext);
   const [username, setUsername] = useState<string>(route.params.username);
 
   const convertMessages = (chat: ChatDetailsWithId) => {
@@ -27,7 +26,7 @@ const Chat = ({ navigation, route }: ChatProps): JSX.Element => {
         createdAt: m.sentAt.toDate(),
         user: {
           _id: m.sentBy,
-          name: m.sentBy,
+          name: 'q',
         },
       });
     });

@@ -6,14 +6,21 @@ import ChatListMember from './ChatListMember';
 import { ChatDetailsWithId } from '../../models/ChatDetails';
 import { NativeStackScreenProps } from 'react-native-screens/native-stack';
 import { ChatStackParamList } from '../navigators/types/ChatStackParamList';
+import { UserChatContext } from '../../contexts/UserChatContext';
 
 type ChatListProps = NativeStackScreenProps<ChatStackParamList, 'ChatList'>;
 const ChatList = ({ navigation }: ChatListProps): JSX.Element => {
   const { userDetails } = useContext(UserDetailsContext);
+  const { userChat, setUserChat } = useContext(UserChatContext);
   const [sortedChats, setSortedChats] = useState<ChatDetailsWithId[]>([]);
 
   useEffect(() => {
     setSortedChats(getSortedChats(userDetails.chats));
+    setUserChat((prevState) => {
+      let chat = userDetails.chats.filter((c) => c.id === prevState?.id)[0];
+
+      return chat;
+    });
   }, [userDetails.chats]);
 
   const getSortedChats = (chats: ChatDetailsWithId[]) => {
@@ -26,10 +33,13 @@ const ChatList = ({ navigation }: ChatListProps): JSX.Element => {
       );
   };
 
-  const handlePress = (username: string, userChat: ChatDetailsWithId) => {
+  const handlePress = (
+    username: string,
+    pressedUserChat: ChatDetailsWithId,
+  ) => {
+    setUserChat(pressedUserChat);
     navigation.navigate('Chat', {
       username,
-      userChat,
     });
   };
 
