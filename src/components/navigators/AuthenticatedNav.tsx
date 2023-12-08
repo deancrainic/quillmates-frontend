@@ -45,6 +45,8 @@ const AuthenticatedNav = (): JSX.Element => {
             setLoading(false);
           });
         }
+
+        setLoading(false);
       });
 
     firestore()
