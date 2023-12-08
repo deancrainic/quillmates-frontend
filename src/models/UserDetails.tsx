@@ -7,4 +7,5 @@ export default interface UserDetails {
   interests: string[];
   ignoredUsers: string[];
   chats: ChatDetailsWithId[];
+  country: string;
 }
