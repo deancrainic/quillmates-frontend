@@ -102,12 +102,7 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
             )
               .then((response) => response.json())
               .then((data) => {
-                // Extract country information from the response
                 const country = data.results[0].components.country;
-                // const countryObj = addressComponents.find(
-                //   (component: { types: string[] }) =>
-                //     component.types.includes('country'),
-                // );
 
                 if (country) {
                   console.log(country);
@@ -172,12 +167,13 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
               />
             </View>
 
-            <View style={styles.locationBtn}>
-              <Button
-                title="Use my location"
-                color="green"
+            <View style={styles.locationBtnView}>
+              <TouchableOpacity
+                style={styles.locationBtn}
                 onPress={locationPermissionStatus}
-              />
+              >
+                <Text style={styles.locationText}>Use my location </Text>
+              </TouchableOpacity>
             </View>
 
             <View>
@@ -233,9 +229,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     padding: 10,
+    color: '#1a3e56',
   },
   saveButton: {
-    backgroundColor: '#f2f3f4',
+    backgroundColor: '#99bbcf',
     padding: 10,
     borderRadius: 5,
     flexDirection: 'row',
@@ -243,11 +240,28 @@ const styles = StyleSheet.create({
   },
 
   textButton: {
-    fontSize: 15,
+    fontSize: 17,
+    fontWeight: '900',
+  },
+
+  locationBtnView: {
+    padding: 15,
   },
 
   locationBtn: {
-    padding: 15,
+    borderRadius: 7,
+    backgroundColor: '#d1ae75',
+    alignSelf: 'center',
+    height: 30,
+    width: 350,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  locationText: {
+    fontSize: 17,
+    fontWeight: '900',
   },
 });
 

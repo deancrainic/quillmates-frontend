@@ -80,9 +80,9 @@ const InputField = ({
         >
           <Text>
             {isPasswordVisible ? (
-              <Icon name="eye-outline" size={23} color="#16715e" />
+              <Icon name="eye-outline" size={23} color="#1a3e56" />
             ) : (
-              <Icon name="eye-off-outline" size={23} color="#16715e" />
+              <Icon name="eye-off-outline" size={23} color="#1a3e56" />
             )}
           </Text>
         </TouchableOpacity>
@@ -100,14 +100,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#16715e',
+    color: '#1a3e56',
   },
   labelFocused: {
     fontWeight: 'bold',
   },
   input: {
     borderWidth: 0,
-    borderColor: '#16715e',
+    borderColor: '#1a3e56',
     borderBottomWidth: 1,
     borderStyle: 'solid',
   },
