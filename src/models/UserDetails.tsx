@@ -1,4 +1,4 @@
-import { ChatDetails } from './ChatDetails';
+import { ChatDetailsWithId } from './ChatDetails';
 
 export default interface UserDetails {
   id: string;
@@ -6,5 +6,5 @@ export default interface UserDetails {
   quote: string;
   interests: string[];
   ignoredUsers: string[];
-  chats: ChatDetails[];
+  chats: ChatDetailsWithId[];
 }

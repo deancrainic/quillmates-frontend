@@ -34,7 +34,6 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
   const [interests, setInterests] = useState<string[]>(userDetails.interests);
 
   useEffect(() => {
-    console.log('Profile updated');
     setUsername(userDetails.username);
     setQuote(userDetails.quote);
     setInterests(userDetails.interests);
@@ -66,7 +65,6 @@ const Profile = ({ navigation, route }: ProfileProps): JSX.Element => {
       quote,
       interests,
       ignoredUsers: userDetails.ignoredUsers,
-      chats: userDetails.chats,
     });
 
     setUserDetails((prevState) => {

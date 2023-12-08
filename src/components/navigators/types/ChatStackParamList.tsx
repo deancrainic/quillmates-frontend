@@ -1,4 +1,4 @@
 export type ChatStackParamList = {
   ChatList: undefined;
-  Chat: undefined;
+  Chat: { username: string };
 };

@@ -1,10 +1,24 @@
 import auth from '@react-native-firebase/auth';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserDetailsContext } from '../../contexts/UserDetailsContext';
 
 export default function LogoutButton() {
+  const { setUserDetails } = useContext(UserDetailsContext);
+
   const handleLogout = async () => {
-    await auth().signOut();
+    auth()
+      .signOut()
+      .then(() => {
+        setUserDetails({
+          id: '',
+          username: '',
+          quote: '',
+          interests: [],
+          ignoredUsers: [],
+          chats: [],
+        });
+      });
   };
 
   return (
