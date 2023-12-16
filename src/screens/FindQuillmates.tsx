@@ -14,8 +14,15 @@ import { calculateInterestsScore } from '../utils/InterestsList';
 import QuillmateSuggestion from '../components/QuillmateSuggestion';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Timestamp } from '@react-native-firebase/firestore/lib/modular/Timestamp';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { AuthenticatedTabsParamList } from '../components/navigators/types/AuthenticatedTabsParamList';
 
-const FindQuillmates = (): JSX.Element => {
+type FindQuillmatesProps = BottomTabScreenProps<
+  AuthenticatedTabsParamList,
+  'FindQuillmates'
+>;
+
+const FindQuillmates = ({ navigation }: FindQuillmatesProps): JSX.Element => {
   const [suggestions, setSuggestions] = useState<UserDetailsWithScore[]>([]);
   const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
@@ -70,7 +77,8 @@ const FindQuillmates = (): JSX.Element => {
                   sentAt: Timestamp.fromDate(dateSent),
                 },
               ],
-            });
+            })
+            .then(() => navigation.navigate('MyQuillmates', { chatId }));
         });
 
       return {
