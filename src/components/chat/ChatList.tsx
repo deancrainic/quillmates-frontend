@@ -50,7 +50,7 @@ const ChatList = ({ navigation }: ChatListProps): JSX.Element => {
         <ScrollView style={styles.listContainer}>
           {sortedChats.map((chat, index) => (
             <ChatListMember
-              key={index}
+              key={chat.users}
               chatDetails={chat}
               handlePress={handlePress}
             />
