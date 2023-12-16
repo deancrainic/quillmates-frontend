@@ -78,7 +78,7 @@ const FindQuillmates = ({ navigation }: FindQuillmatesProps): JSX.Element => {
                 },
               ],
             })
-            .then(() => navigation.navigate('MyQuillmates', { chatId }));
+            .then(() => navigation.navigate('MyQuillmates'));
         });
 
       return {
