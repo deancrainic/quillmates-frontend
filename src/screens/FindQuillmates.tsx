@@ -120,6 +120,10 @@ const FindQuillmates = ({ navigation }: FindQuillmatesProps): JSX.Element => {
             continue;
           }
 
+          if (userData.country === userDetails.country) {
+            continue;
+          }
+
           if (userDetails.ignoredUsers.includes(userData.id)) {
             continue;
           }
