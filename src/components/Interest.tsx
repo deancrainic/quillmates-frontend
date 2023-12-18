@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#c0d7e7',
     borderRadius: 5,
     alignItems: 'center',
-    width: 180,
+    width: 150,
   },
 
   selectedInterest: {
